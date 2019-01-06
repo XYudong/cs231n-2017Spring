@@ -82,7 +82,19 @@ def svm_loss_vectorized(W, X, y, reg):
   # Implement a vectorized version of the structured SVM loss, storing the    #
   # result in loss.                                                           #
   #############################################################################
-  pass
+  scores = X.dot(W)    # N x C
+  num_train = X.shape[0]
+  rows = np.arange(num_train)
+
+  hinge = np.maximum(scores - scores[rows, y].reshape((-1, 1)) + 1, 0)    # delta = 1
+  hinge[rows, y] = 0    # true class 
+  Li = np.sum(hinge, 1)
+  data_loss = np.sum(Li) / num_train
+    
+  reg_loss = reg * np.sum(W * W)    # regularization loss
+
+  loss = data_loss + reg_loss
+
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
@@ -97,7 +109,14 @@ def svm_loss_vectorized(W, X, y, reg):
   # to reuse some of the intermediate values that you used to compute the     #
   # loss.                                                                     #
   #############################################################################
-  pass
+  pos_mask = (hinge > 0).astype(float)    # mask of positive margins
+  num_pos = pos_mask.sum(1)    # count how many times margins>0 for each image(i.e. per row)
+  pos_mask[rows, y] = -num_pos    # negative for the weights of the true class 
+  
+  dW = X.T.dot(pos_mask)
+  dW /= num_train
+  dW += 2 * reg * W
+  
   #############################################################################
   #                             END OF YOUR CODE                              #
   #############################################################################
