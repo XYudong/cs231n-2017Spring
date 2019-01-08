@@ -113,7 +113,7 @@ def svm_loss_vectorized(W, X, y, reg):
   num_pos = pos_mask.sum(1)    # count how many times margins>0 for each image(i.e. per row)
   pos_mask[rows, y] = -num_pos    # negative for the weights of the true class 
   
-  dW = X.T.dot(pos_mask)
+  dW = X.T.dot(pos_mask)    # use dimension analysis to derive this expression
   dW /= num_train
   dW += 2 * reg * W
   
