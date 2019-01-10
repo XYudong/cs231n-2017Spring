@@ -87,7 +87,7 @@ def svm_loss_vectorized(W, X, y, reg):
   rows = np.arange(num_train)
 
   hinge = np.maximum(scores - scores[rows, y].reshape((-1, 1)) + 1, 0)    # delta = 1
-  hinge[rows, y] = 0    # true class 
+  hinge[rows, y] = 0    # for the true class 
   Li = np.sum(hinge, 1)
   data_loss = np.sum(Li) / num_train
     

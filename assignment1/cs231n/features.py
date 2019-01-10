@@ -32,7 +32,7 @@ def extract_features(imgs, feature_fns, verbose=False):
   feature_dims = []
   first_image_features = []
   for feature_fn in feature_fns:
-    feats = feature_fn(imgs[0].squeeze())
+    feats = feature_fn(imgs[0])    #.squeeze()
     assert len(feats.shape) == 1, 'Feature functions must be one-dimensional'
     feature_dims.append(feats.size)
     first_image_features.append(feats)
@@ -92,7 +92,7 @@ def hog_feature(im):
     image = rgb2gray(im)
   else:
     image = np.at_least_2d(im)
-
+  
   sx, sy = image.shape # image size
   orientations = 9 # number of gradient bins
   cx, cy = (8, 8) # pixels per cell
@@ -118,7 +118,7 @@ def hog_feature(im):
     # select magnitudes for those orientations
     cond2 = temp_ori > 0
     temp_mag = np.where(cond2, grad_mag, 0)
-    orientation_histogram[:,:,i] = uniform_filter(temp_mag, size=(cx, cy))[cx/2::cx, cy/2::cy].T
+    orientation_histogram[:,:,i] = uniform_filter(temp_mag, size=(cx, cy))[int(cx/2)::cx, int(cy/2)::cy].T
   
   return orientation_histogram.ravel()
 
