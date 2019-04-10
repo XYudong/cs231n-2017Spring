@@ -162,7 +162,7 @@ class Solver(object):
 
         # Make a deep copy of the optim_config for each parameter
         self.optim_configs = {}
-        for p in self.model.params:
+        for p in self.model.params:    # get the keys in params
             d = {k: v for k, v in self.optim_config.items()}
             self.optim_configs[p] = d
 
@@ -248,7 +248,7 @@ class Solver(object):
             end = (i + 1) * batch_size
             scores = self.model.loss(X[start:end])
             y_pred.append(np.argmax(scores, axis=1))
-        y_pred = np.hstack(y_pred)
+        y_pred = np.hstack(y_pred)        # this is cool
         acc = np.mean(y_pred == y)
 
         return acc
@@ -263,7 +263,7 @@ class Solver(object):
         num_iterations = self.num_epochs * iterations_per_epoch
 
         for t in range(num_iterations):
-            self._step()
+            self._step()    # update parameters with just a minibatch of data
 
             # Maybe print training loss
             if self.verbose and t % self.print_every == 0:

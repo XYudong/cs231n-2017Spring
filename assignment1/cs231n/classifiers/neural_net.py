@@ -96,7 +96,7 @@ class TwoLayerNet(object):
     # in the variable loss, which should be a scalar. Use the Softmax           #
     # classifier loss.                                                          #
     #############################################################################
-    scores -= np.max(scores, 1).reshape((-1, 1))
+    scores -= np.max(scores, 1, keepdims=True)    # shift scores to avoid potential overflow
     s_exp = np.exp(scores)
     summation = np.sum(s_exp, 1)
     data_loss = np.sum(-scores[np.arange(N), y] + np.log(summation)) / N
